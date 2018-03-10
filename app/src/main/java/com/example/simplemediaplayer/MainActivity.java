@@ -1,7 +1,8 @@
 package com.example.simplemediaplayer;
 
 import android.app.Activity;
-import android.graphics.Color;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +10,6 @@ import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.SurfaceHolder;
-import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +47,10 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         Log.i(TAG, "Created");
     }
 
+    public void appEnd(){
+        this.finish();
+    }
+
     @Override
     public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
         Log.i(TAG, "Enter");
@@ -60,14 +64,22 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
             mp.setVolume((float) 0.5, (float) 0.5);
 
             mediaPath = System.getenv("EXTERNAL_STORAGE") + MP4_FILE;
-            TextView tv = (TextView) findViewById(R.id.textView);
             File file = new File(mediaPath);
             if (!file.exists()) {
-                tv.setText("Store a1.mp4 to " + mediaPath);
                 Log.i(TAG, "A video file is not exist");
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Put a mp4 file to " + mediaPath + ", and Execute again.")
+                        .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                appEnd();
+                            }
+                        });
+                builder.show();
+
             } else {
-                tv.setText("");
                 Log.i(TAG, "A video file is exist");
+
                 mediaPlay(mp, mediaPath);
             }
         }
@@ -95,5 +107,3 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         Log.i(TAG, "surfaceDestroyed()");
     }
 }
-
-
