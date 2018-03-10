@@ -1,6 +1,7 @@
 package com.example.simplemediaplayer;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +9,9 @@ import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.SurfaceHolder;
+import android.widget.TextView;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MainActivity extends Activity implements SurfaceHolder.Callback {
@@ -40,6 +43,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         holder1 = mPreview.getHolder();
         holder1.addCallback(this);
 
+
         Log.i(TAG, "Created");
     }
 
@@ -48,15 +52,24 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         Log.i(TAG, "Enter");
         MediaPlayer mp = new MediaPlayer();
 
-        if(paramSurfaceHolder==holder1){
+        if(paramSurfaceHolder==holder1) {
             Log.i(TAG, "holder1");
             String mediaPath;
 
             mp.setDisplay(paramSurfaceHolder);
-            mp.setVolume((float)0.5,(float)0.5);
+            mp.setVolume((float) 0.5, (float) 0.5);
 
             mediaPath = System.getenv("EXTERNAL_STORAGE") + MP4_FILE;
-            mediaPlay(mp,mediaPath);
+            TextView tv = (TextView) findViewById(R.id.textView);
+            File file = new File(mediaPath);
+            if (!file.exists()) {
+                tv.setText("Store a1.mp4 to " + mediaPath);
+                Log.i(TAG, "A video file is not exist");
+            } else {
+                tv.setText("");
+                Log.i(TAG, "A video file is exist");
+                mediaPlay(mp, mediaPath);
+            }
         }
     }
 
