@@ -16,12 +16,18 @@ import java.io.IOException;
 
 public class MainActivity extends Activity implements SurfaceHolder.Callback {
     private static final String TAG = "SimpleMediaPlayer";
-    private static final String MP4_FILE = "/video/a1.mp4";
+
+    private static final String MP4_FILE = "a1.mp4";
+    private static final String VIDEO_PATH = System.getenv("EXTERNAL_STORAGE") + "/video/";
+    String mediaPath =  VIDEO_PATH + MP4_FILE;
+
     private SurfaceHolder holder1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.i(TAG, "onCreate");
 
         /* No window title */
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -37,14 +43,24 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         //getWindow().setFormat(PixelFormat.TRANSPARENT);
         //getWindow().setFormat(PixelFormat.RGBX_8888);
 
-        //layout_height
-        mPreview = (SurfaceView) findViewById(R.id.surfaceView);
-        //mPreview.setSecure(true);
-        holder1 = mPreview.getHolder();
-        holder1.addCallback(this);
+        if (new File(mediaPath).exists()) {
+            Log.i(TAG, "A video file is exist");
 
+            mPreview = (SurfaceView) findViewById(R.id.surfaceView);
+            //mPreview.setSecure(true);
 
-        Log.i(TAG, "Created");
+            holder1 = mPreview.getHolder();
+            holder1.addCallback(this);
+        } else {
+            Log.i(TAG, "A video file is not exist");
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Put \"" + MP4_FILE + "\" to " + VIDEO_PATH + ", and Execute again.")
+                    .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) { appEnd(); }
+                    });
+            builder.show();
+        }
     }
 
     public void appEnd(){
@@ -58,30 +74,10 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 
         if(paramSurfaceHolder==holder1) {
             Log.i(TAG, "holder1");
-            String mediaPath;
 
             mp.setDisplay(paramSurfaceHolder);
             mp.setVolume((float) 0.5, (float) 0.5);
-
-            mediaPath = System.getenv("EXTERNAL_STORAGE") + MP4_FILE;
-            File file = new File(mediaPath);
-            if (!file.exists()) {
-                Log.i(TAG, "A video file is not exist");
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Put a mp4 file to " + mediaPath + ", and Execute again.")
-                        .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                appEnd();
-                            }
-                        });
-                builder.show();
-
-            } else {
-                Log.i(TAG, "A video file is exist");
-
-                mediaPlay(mp, mediaPath);
-            }
+            mediaPlay(mp, mediaPath);
         }
     }
 
