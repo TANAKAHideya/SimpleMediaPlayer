@@ -27,9 +27,11 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
     String mediaPath =  VIDEO_PATH + MP4_FILE;
 
     private static boolean mpstarted=false;
+    private static boolean haveafile=false;
     private static boolean havepermission=false;
     private SurfaceHolder holder1;
     private void appEnd(){
+        Log.i(TAG, "appEnd");
         this.finish();
     }
 
@@ -58,6 +60,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 
         if (new File(mediaPath).exists()) {
             Log.i(TAG, "A video file is exist");
+            haveafile=true;
         } else {
             Log.i(TAG, "A video file is not exist");
             new AlertDialog.Builder(this)
@@ -105,6 +108,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
                     havepermission=true;
                     mediaPlay(mp, mediaPath);
                 } else {
+                    Log.i(TAG, "not allowed");
                     appEnd();
                 }
             }
@@ -119,7 +123,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
     }
 
     private void mediaPlay(MediaPlayer mp,String mediaPath) {
-        if (mpstarted==false && havepermission==true) {
+        if (mpstarted==false && havepermission==true && haveafile==true) {
             mpstarted=true;
 
             try {
