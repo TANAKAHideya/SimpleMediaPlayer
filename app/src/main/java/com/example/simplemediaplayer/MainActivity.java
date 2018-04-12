@@ -48,7 +48,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         setContentView(R.layout.activity_main);
 
 		/* Set Full screen flag */
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         /* add FLAG_KEEP_SCREEN_ON */
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         /* Support Transparent color */
