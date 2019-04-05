@@ -22,7 +22,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
     private static final String TAG = "SimpleMediaPlayer";
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE=999;
 
-    private static final String MP4_FILE = "a1.mp4";
+    private static final String MP4_FILE = "video.mp4";
     private static final String VIDEO_PATH = System.getenv("EXTERNAL_STORAGE") + "/video/";
     String mediaPath =  VIDEO_PATH + MP4_FILE;
 
